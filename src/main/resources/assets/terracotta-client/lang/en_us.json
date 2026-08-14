@@ -58,6 +58,8 @@
   "terracotta-client.config.value.connection_message_type.option.VERBOSE": "Verbose",
   "terracotta-client.config.value.connection_message_type.option.MINIMAL": "Minimal",
   "terracotta-client.config.value.connection_message_type.option.NONE": "None",
+  "terracotta-client.config.value.use_highres_icon.name": "Use High Resolution Icon",
+  "terracotta-client.config.value.use_highres_icon.description": "Determines whether to use the\nhigher (%T$s) or lower (%t$s)\nresolution Terracotta icon in\nTerracotta's messages.",
 
   "terracotta-client.editor.stuck": "If the code editor has gotten stuck, run %1$s to abort."
 }

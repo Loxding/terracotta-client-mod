@@ -21,6 +21,9 @@ public class Config {
     @ConfigValue(key = "connection_message_type", order = 30)
     public static ConnectionMessageMode connectionMessageMode = ConnectionMessageMode.VERBOSE;
 
+    @ConfigValue(key = "use_highres_icon", order = 40)
+    public static boolean useHighresIcon = true;
+
 
     private static Path CONFIG_FILE_PATH = TCClient.getConfigPath().resolve("config.json");
 

@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import org.lwjgl.glfw.GLFW;
@@ -27,6 +28,9 @@ import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static owlfroggy.terracottaclient.MsgHelper.ICON_COMP;
+import static owlfroggy.terracottaclient.MsgHelper.LOW_ICON_COMP;
 
 public class ConfigListWidget extends TCListWidget<ConfigListWidget.ConfigEntry> {
     public ConfigListWidget(Minecraft minecraft, int width, int height, int y) {
@@ -133,7 +137,27 @@ public class ConfigListWidget extends TCListWidget<ConfigListWidget.ConfigEntry>
                 ArrayList<Component> lines = Arrays.stream(Component.translatable("terracotta-client.config.value."+key+".description")
                         .getString()
                         .split("\n"))
-                        .map(s -> (Component)Component.literal(s).withColor(MsgHelper.COLOR.LIGHT_GRAY))
+                        .map(s -> {
+                            // all this just to insert the terracotta logos...
+                            List<String> bSplit = Arrays.stream(s.split("%T\\$s")).toList();
+                            MutableComponent bRtrn = Component.empty();
+                            for (String bS : bSplit) {
+                                List<String> lSplit = Arrays.stream(bS.split("%t\\$s")).toList();
+                                MutableComponent lRtrn = Component.empty();
+                                for (String lS : lSplit) {
+                                    lRtrn.append(lS);
+                                    if (!lS.equals(lSplit.getLast())) {
+                                        lRtrn.append(LOW_ICON_COMP);
+                                    }
+                                }
+                                bRtrn.append(lRtrn);
+                                if (!bS.equals(bSplit.getLast())) {
+                                    bRtrn.append(ICON_COMP);
+                                }
+                            }
+
+                            return (Component)bRtrn.withColor(MsgHelper.COLOR.LIGHT_GRAY);
+                        })
                         .collect(Collectors.toCollection(ArrayList::new));
                 lines.addFirst(configNameComp);
 
