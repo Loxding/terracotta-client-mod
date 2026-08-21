@@ -6,6 +6,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.resources.Identifier;
 import owlfroggy.terracottaclient.api.APIToken;
 import owlfroggy.terracottaclient.api.Permission;
+import owlfroggy.terracottaclient.config.Config;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,11 +23,17 @@ public class MsgHelper {
         public static int LIGHT_GRAY = 0xAAAAAA;
     }
 
-    private static final Component ICON_COMP = Component.literal(" T  ")
+    public static final Component ICON_COMP = Component.literal(" T  ")
         .withStyle(style -> style
             .withFont(new FontDescription.Resource(Identifier.parse("terracotta-client:icons")))
             .withShadowColor(0x000000_00)
         );
+
+    public static final Component LOW_ICON_COMP = Component.literal(" t  ")
+            .withStyle(style -> style
+                    .withFont(new FontDescription.Resource(Identifier.parse("terracotta-client:icons")))
+                    .withShadowColor(0x000000_00)
+            );
 
     private static final List<Component> queuedChatMessages = new ArrayList<>();
 
@@ -39,7 +46,7 @@ public class MsgHelper {
     public static void sendTCMessage(Component comp) {
         sendMessage(
             Component.empty()
-                .append(ICON_COMP)
+                .append(Config.useHighresIcon ? ICON_COMP : LOW_ICON_COMP)
                 .append(comp)
         );
     }
@@ -57,7 +64,7 @@ public class MsgHelper {
     public static void safeTCMessage(Component comp) {
         safeMessage(
             Component.empty()
-                .append(ICON_COMP)
+                .append(Config.useHighresIcon ? ICON_COMP : LOW_ICON_COMP)
                 .append(comp)
         );
     }
