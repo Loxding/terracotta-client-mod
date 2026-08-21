@@ -174,6 +174,7 @@ implements
         stuckDetectorCount = 0;
 
         TCClient.MOVEMENT_MANAGER.setShouldHoldFastSpeed(true);
+        TCClient.MOVEMENT_MANAGER.waitForChunkLoad();
 
         // count how many new templates will be added to the plot
         int newTemplateCount = 0;

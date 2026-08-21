@@ -418,6 +418,8 @@ implements
     public void scanPlot() {
         if (isScanning()) {return;}
 
+        TCClient.MOVEMENT_MANAGER.waitForChunkLoad();
+
         CompletableFuture.runAsync(() -> {
             try {
                 if (mode != Mode.DEV)

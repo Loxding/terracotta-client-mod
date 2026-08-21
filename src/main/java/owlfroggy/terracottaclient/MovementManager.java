@@ -5,7 +5,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.Vec3i;
 import owlfroggy.terracottaclient.gameinterface.ChatMessageReceiver;
-import owlfroggy.terracottaclient.gameinterface.ModeChangeReceiver;
 import owlfroggy.terracottaclient.gameinterface.TeleportReceiver;
 import owlfroggy.terracottaclient.gameinterface.TickEndReceiver;
 
@@ -45,6 +44,7 @@ implements
     private int ticksSinceLastMoveSpeedConfirmation = 0;
 
     public boolean shouldHideNextFlightSpeedMsg = false;
+    public boolean waitingForChunkLoad = true;
 
     @Override
     public void onTickEnd(Minecraft client) {
@@ -91,6 +91,22 @@ implements
         if (!TCClient.MCI.player.getAbilities().flying) {
             TCClient.MCI.player.getAbilities().flying = true;
             TCClient.MCI.player.onUpdateAbilities();
+        }
+
+        // wait for the first chunks to load before zooming off into the void to avoid glitching out the player
+        if (waitingForChunkLoad) {
+            boolean isLoaded = true;
+            for (int x = -16; x <= 16; x += 16) {
+                for (int z = -16; z <= 16; z += 16) {
+                    Vec3 chunkPos = TCClient.MCI.player.position().add(x, 0, z);
+                    if (!TCClient.isChunkLoaded(chunkPos)) {
+                        isLoaded = false;
+                        break;
+                    }
+                }
+            }
+            if (isLoaded) waitingForChunkLoad = false;
+            return;
         }
 
         double movementSpeed = getMovementSpeed();
@@ -197,5 +213,10 @@ implements
         return currentMovementId;
     }
 
-
+    /** If the chunk the player is in is already loaded, this will not wait */
+    public void waitForChunkLoad() {
+        if (!TCClient.isChunkLoaded(TCClient.MCI.player.position())) {
+            waitingForChunkLoad = true;
+        }
+    }
 }
