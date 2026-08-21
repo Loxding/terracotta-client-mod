@@ -135,30 +135,30 @@ public class ConfigListWidget extends TCListWidget<ConfigListWidget.ConfigEntry>
             if (this.isMouseOverBg(mouseX,mouseY)) {
                 // all this just to split by \n and add a title...
                 ArrayList<Component> lines = Arrays.stream(Component.translatable("terracotta-client.config.value."+key+".description")
-                        .getString()
-                        .split("\n"))
-                        .map(s -> {
-                            // all this just to insert the terracotta logos...
-                            List<String> bSplit = Arrays.stream(s.split("%T\\$s")).toList();
-                            MutableComponent bRtrn = Component.empty();
-                            for (String bS : bSplit) {
-                                List<String> lSplit = Arrays.stream(bS.split("%t\\$s")).toList();
-                                MutableComponent lRtrn = Component.empty();
-                                for (String lS : lSplit) {
-                                    lRtrn.append(lS);
-                                    if (!lS.equals(lSplit.getLast())) {
-                                        lRtrn.append(LOW_ICON_COMP);
-                                    }
-                                }
-                                bRtrn.append(lRtrn);
-                                if (!bS.equals(bSplit.getLast())) {
-                                    bRtrn.append(ICON_COMP);
+                    .getString()
+                    .split("\n"))
+                    .map(s -> {
+                        // all this just to insert the terracotta logos...
+                        List<String> bSplit = Arrays.stream(s.split("%T\\$s")).toList();
+                        MutableComponent bRtrn = Component.empty();
+                        for (String bS : bSplit) {
+                            List<String> lSplit = Arrays.stream(bS.split("%t\\$s")).toList();
+                            MutableComponent lRtrn = Component.empty();
+                            for (String lS : lSplit) {
+                                lRtrn.append(lS);
+                                if (!lS.equals(lSplit.getLast())) {
+                                    lRtrn.append(LOW_ICON_COMP).append(MsgHelper.getNegativeSpace(1));
                                 }
                             }
+                            bRtrn.append(lRtrn);
+                            if (!bS.equals(bSplit.getLast())) {
+                                bRtrn.append(ICON_COMP).append(MsgHelper.getNegativeSpace(2));
+                            }
+                        }
 
-                            return (Component)bRtrn.withColor(MsgHelper.COLOR.LIGHT_GRAY);
-                        })
-                        .collect(Collectors.toCollection(ArrayList::new));
+                        return (Component)bRtrn.withColor(MsgHelper.COLOR.LIGHT_GRAY);
+                    })
+                    .collect(Collectors.toCollection(ArrayList::new));
                 lines.addFirst(configNameComp);
 
                 graphics.setTooltipForNextFrame(

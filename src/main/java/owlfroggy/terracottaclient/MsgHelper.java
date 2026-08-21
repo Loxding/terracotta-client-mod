@@ -22,18 +22,19 @@ public class MsgHelper {
         public static int LIGHT_GOLD = 0xFFD47F;
         public static int LIGHT_GRAY = 0xAAAAAA;
     }
+    public static final FontDescription.Resource ICON_FONT_DESC = new FontDescription.Resource(Identifier.parse("terracotta-client:icons"));
 
     public static final Component ICON_COMP = Component.literal(" T  ")
         .withStyle(style -> style
-            .withFont(new FontDescription.Resource(Identifier.parse("terracotta-client:icons")))
+            .withFont(ICON_FONT_DESC)
             .withShadowColor(0x000000_00)
         );
 
     public static final Component LOW_ICON_COMP = Component.literal(" t  ")
-            .withStyle(style -> style
-                    .withFont(new FontDescription.Resource(Identifier.parse("terracotta-client:icons")))
-                    .withShadowColor(0x000000_00)
-            );
+        .withStyle(style -> style
+            .withFont(ICON_FONT_DESC)
+            .withShadowColor(0x000000_00)
+        );
 
     private static final List<Component> queuedChatMessages = new ArrayList<>();
 
@@ -93,6 +94,15 @@ public class MsgHelper {
     }
 
     /* MESSAGE BUILDER STUFF */
+
+    /**
+     * Returns a negative space component `px`e pixels wide.
+     * If this is ever used for more than a few pixels of negative space, this solution needs to be updated
+     */
+    public static Component getNegativeSpace(int px) {
+        return Component.literal("-".repeat(px)).withStyle(style -> style.withFont(ICON_FONT_DESC));
+    }
+
     public static String prettifySeconds(long seconds) {
         if (seconds < 60) return seconds+"s";
         if (seconds < 60*60) return (seconds/60)+"m";
