@@ -273,13 +273,14 @@ implements
 
     private void processCodeEditResponse(Vec3i plotSpacePos, BlockState blockState, boolean cameFromClient) {
         CodeEdit edit = codeEditsByPlotPos.getOrDefault(plotSpacePos, null);
-        if (!TCClient.isChunkLoaded(TCClient.DF_STATE.toWorldSpace(plotSpacePos))) return;
+        Vec3i worldSpacePos = TCClient.DF_STATE.toWorldSpace(plotSpacePos);
+        if (!TCClient.isChunkLoaded(worldSpacePos)) return;
 
         if (edit != null) {
             switch (edit.state) {
                 case WAITING_FOR_BREAK_VERIFICATION -> {
                     // block was successfully broken
-                    if (blockState.getBlock() == Blocks.AIR && !cameFromClient) {
+                    if (blockState.getBlock() == Blocks.AIR && TCClient.isChunkLoaded(worldSpacePos) && !cameFromClient) {
                         edit.breakWasDefinitelySuccessful = true;
                         progressMadeThisTick = true;
                         if (edit.action == CodeEdit.Action.REPLACE) {
