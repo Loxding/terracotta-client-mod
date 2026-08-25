@@ -22,6 +22,19 @@ repositories {
         name = "Terraformers"
         url = "https://maven.terraformersmc.com/"
     }
+
+    // bobby
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 dependencies {
@@ -34,6 +47,9 @@ dependencies {
 
     // modmenu
     implementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+
+    // bobby
+    compileOnly "maven.modrinth:M08ruV16:KLiFVFju"
 
     // https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket
     include(implementation("org.java-websocket:Java-WebSocket:1.6.0"))
